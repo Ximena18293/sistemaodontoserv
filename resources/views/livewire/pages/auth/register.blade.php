@@ -50,9 +50,9 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 <div>
     <form wire:submit.prevent="register">
-        <!-- Nombre -->
+        <!-- Usuario -->
         <div>
-            <x-input-label for="name" :value="__('Nombre')" />
+            <x-input-label for="name" :value="__('Usuario')" />
             <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
