@@ -36,7 +36,7 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
         </div>
 
-        <!-- Password -->
+        <!-- Password "contraseña" -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
