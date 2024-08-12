@@ -35,6 +35,7 @@
                         <th class="py-3 px-4 text-left">Nombre</th>
                         <th class="py-3 px-4 text-left">Descripción</th>
                         <th class="py-3 px-4 text-left">Categoría</th>
+                        <th class="py-3 px-4 text-left">Marca</th>
                         <th class="py-3 px-4 text-left">Precio</th>
                         <th class="py-3 px-4 text-left">Stock</th>
                         <th class="py-3 px-4 text-left">Estado</th>
