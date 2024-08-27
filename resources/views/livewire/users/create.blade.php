@@ -47,7 +47,6 @@
                 <select id="role" name="role" required class="form-select @error('role') is-invalid @enderror">
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrador</option>
                     <option value="empleado" {{ old('role') == 'empleado' ? 'selected' : '' }}>Empleado</option>
-                    <option value="cliente" {{ old('role') == 'cliente' ? 'selected' : '' }}>Cliente</option>
                 </select>
                 @error('role')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
