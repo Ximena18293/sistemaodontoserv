@@ -49,7 +49,6 @@
             <select class="form-select" id="role" name="role" required>
                 <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Administrador</option>
                 <option value="empleado" {{ old('role', $user->role) == 'empleado' ? 'selected' : '' }}>Empleado</option>
-                <option value="cliente" {{ old('role', $user->role) == 'cliente' ? 'selected' : '' }}>Cliente</option>
             </select>
             @error('role')
                 <div class="text-danger mt-1">{{ $message }}</div>
