@@ -34,7 +34,7 @@ new #[Layout('layouts.guest')] class extends Component
 
         // Verificar si es el primer usuario
         $isFirstUser = User::count() === 0;
-        $validated['role'] = $isFirstUser ? 'admin' : 'empleado';
+        $validated['role'] = $isFirstUser ? 'admin' : 'empleado' : 'cliente';
         $validated['status'] = 1; // Activo
         $validated['user_id'] = 1; // Valor por defecto
 
