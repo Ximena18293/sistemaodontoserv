@@ -49,6 +49,7 @@
                             <td class="py-3 px-4">{{ $product->id }}</td>
                             <td class="py-3 px-4">{{ $product->name }}</td>
                             <td class="py-3 px-4">{{ $product->description }}</td>
+                            <td class="py-3 px-4">{{ $product->brand }}</td>
                             <td class="py-3 px-4">{{ $product->category }}</td>
                             <td class="py-3 px-4">${{ number_format($product->price, 2) }}</td>
                             <td class="py-3 px-4">{{ $product->stock }}</td>
