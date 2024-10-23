@@ -27,9 +27,9 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="marca" class="form-label">Marca</label>
-                <input type="text" class="form-control" id="marca" name="marca" value="{{ old('category', $product->category) }}">
-                @error('marca')
+                <label for="brand" class="form-label">Marca</label>
+                <input type="text" class="form-control" id="brand" name="brand" value="{{ old('brand', $product->category) }}">
+                @error('brand')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
