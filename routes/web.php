@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\EmployeeController;
 
 Route::view('/', 'welcome');
 
@@ -37,5 +38,16 @@ Route::prefix('products')->group(function () {
     Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggleStatus');
 });
 
-    
+Route::prefix('employees')->group(function () {
+    Route::get('/', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::get('/create', [EmployeeController::class, 'create'])->name('employees.create');
+    Route::get('/create/{user}', [EmployeeController::class, 'showCreateForm'])->name('employees.showCreateForm');
+    Route::post('/', [EmployeeController::class, 'store'])->name('employees.store');
+    Route::get('/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
+    Route::put('/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+    Route::delete('/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::patch('/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])->name('employees.toggleStatus');
+});
+
+
 require __DIR__.'/auth.php';
