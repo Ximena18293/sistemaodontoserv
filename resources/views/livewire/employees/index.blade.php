@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h2>Lista de Empleados</h2>
 
     <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">
         <i class="fas fa-plus"></i> Agregar Nuevo Empleado
@@ -31,6 +30,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre Completo</th>
+                        <th>Dirección</th>
                         <th>Cargo</th>
                         <th>Teléfono</th>
                         <th>Estado</th>
@@ -40,8 +40,9 @@
                 <tbody>
                     @foreach($employees as $employee)
                         <tr>
-                            <td>{{ $employee->id }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $employee->user->name }} {{ $employee->user->first_name }} {{ $employee->user->last_name }}</td>
+                            <td>{{ $employee->address }}</td>
                             <td>{{ $employee->position }}</td>
                             <td>{{ $employee->phone }}</td>
                             <td>
