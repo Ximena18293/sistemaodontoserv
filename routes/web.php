@@ -102,6 +102,7 @@ Route::prefix('sales')->group(function () {
     Route::put('/{sale}', [SaleController::class, 'update'])->name('sales.update'); // Actualizar venta
     Route::delete('/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy'); // Eliminar venta
     Route::get('/product', [SaleController::class, 'product'])->name('sales.product'); // Crear una nueva venta
+    Route::get('/sales/{sale}/invoice', [SaleController::class, 'generateInvoice'])->name('sales.invoice');
 });
 
 // Detalles de venta (SaleItem)
@@ -110,5 +111,7 @@ Route::prefix('sales/{sale}/items')->group(function () {
     Route::post('/', [SaleItemController::class, 'store'])->name('sales.items.store'); // Añadir un producto
     Route::delete('/{item}', [SaleItemController::class, 'destroy'])->name('sales.items.destroy'); // Eliminar un producto
 });
+
+Route::get('/report/sales', [SaleController::class, 'salesReport'])->name('reports.sales');
 
 require __DIR__.'/auth.php';

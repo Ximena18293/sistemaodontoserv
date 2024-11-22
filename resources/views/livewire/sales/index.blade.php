@@ -37,7 +37,7 @@
                         <td>{{ number_format($sale->discount, 2) }}</td>
                         <td>{{ $sale->status ? 'Activo' : 'Inactivo' }}</td>
                         <td>
-                            <a href="{{ route('sales.show', $sale->id) }}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{{ route('sales.invoice', $sale->id) }}" class="btn btn-info btn-sm" target="_blank">Ver</a>
                             <a href="{{ route('sales.edit', $sale->id) }}" class="btn btn-warning btn-sm">Editar</a>
                             <form action="{{ route('sales.destroy', $sale->id) }}" method="POST" style="display:inline;">
                                 @csrf

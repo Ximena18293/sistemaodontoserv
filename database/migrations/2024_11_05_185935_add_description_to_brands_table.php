@@ -12,7 +12,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('brands', function (Blueprint $table) {
-        $table->string('description')->nullable(); // Agregar la columna de descripción
+            if (!Schema::hasColumn('brands', 'description')) {
+                $table->string('description')->nullable(); // Agregar la columna de descripción
+            }
         });
     }
 

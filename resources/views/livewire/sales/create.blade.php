@@ -1,31 +1,42 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Ventas')
+@section('title', 'Crear Nueva Venta')
 
 @section('content')
 <div class="container">
     <h1>Crear Nueva Venta</h1>
 
-    @if (session()->has('message'))
-        <div class="alert alert-success">{{ session('message') }}</div>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <form action="{{ route('sales.store')}}" method="POST">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('sales.store') }}" method="POST">
         @csrf
-        <input type="hidden" >
+
+        <!-- Cliente -->
         <div class="mb-3">
-            <label for="client" class="form-label">Cliente</label>
-            <select wire:model="selectedClient" id="client" class="form-select">
+            <label for="client_id" class="form-label">Cliente</label>
+            <select name="client_id" id="client_id" class="form-select" required>
                 <option value="">Seleccione un cliente</option>
-                @foreach($clients as $client)
+                @foreach ($clients as $client)
                     <option value="{{ $client->id }}">{{ $client->company_name }} ({{ $client->ciNit }})</option>
                 @endforeach
             </select>
-            @error('selectedClient') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Productos -->
         <h3>Productos</h3>
-        <table class="table" id="table-products">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Producto</th>
@@ -35,64 +46,71 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="list-productos">
-                
+            <tbody id="selected-products">
+                <!-- Productos seleccionados se agregarán aquí -->
             </tbody>
         </table>
-        <!-- Botón para abrir el modal -->
-<button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
-    Agregar producto
-</button>
 
-<!-- Modal -->
-<!-- Modal -->
+        <!-- Botón para abrir el modal -->
+        <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            Agregar producto
+        </button>
+
+        <!-- Totales -->
+        <div class="mb-3">
+            <label for="discount" class="form-label">Descuento</label>
+            <input type="number" name="discount" id="discount" class="form-control" min="0" step="0.01" value="0">
+        </div>
+        <div class="totals">
+            <p>Total productos: $<span id="total-products">0.00</span></p>
+            <p>Total a pagar: $<span id="total-sale">0.00</span></p>
+        </div>
+        <input type="hidden" name="total" id="total">
+        <input type="hidden" name="total_after_discount" id="total_after_discount">
+        <button type="submit" class="btn btn-primary">Guardar Venta</button>
+        <a href="{{ route('sales.index') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<!-- Modal para agregar productos -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modal-title">AGREGAR PRODUCTO</h4>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modal-title">Agregar Producto</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <!-- Buscador -->
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Buscar..." id="in-busc" onkeyup="searchProducts()">
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" id="product-search" placeholder="Buscar producto..." onkeyup="searchProducts()">
                 </div>
-                
-                <!-- Tabla de productos -->
-                <div class="form-group">
-                    <table class="table" style="border-collapse: collapse" width="100%">
-                        <tbody id="product-list">
-                            <!-- Aquí se cargan los productos mediante AJAX o desde el controlador -->
-                            @foreach($products as $product)
-                                <tr>
-                                    <td width="40%">
-                                        <img src="{{ asset('img/box-empty.png') }}" alt="prod" width="auto" height="100">
-                                    </td>
-                                    <td width="60%">
-                                        <input type="hidden" class="product-id" value="{{ $product->id }}">
-                                        <p class="m-0 p-0 product-name"><b>{{ $product->name }}</b></p>
-                                        <p class="m-0 p-0 product-category">{{ $product->category->name }}</p>
-                                        <p class="m-0 p-0 product-price">{{ $product->price }}</p>
-                                        <div class="d-flex">
-                                            <div class="col-6">
-                                                <select class="form-control product-quantity">
-                                                    <option value="1">1</option>
-                                                    @for($i = 2; $i <= $product->stock; $i++)
-                                                        <option value="{{ $i }}">{{ $i }}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                            <div class="col-6">
-                                                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="addProductToSale({{ $product->id }})">AGREGAR</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-list">
+                        @foreach ($products as $product)
+                            <tr>
+                                <td>
+                                    <b>{{ $product->name }}</b><br>
+                                    {{ $product->category->name }}
+                                </td>
+                                <td>${{ $product->price }}</td>
+                                <td>{{ $product->stock }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="addProduct({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, {{ $product->stock }})">
+                                        Agregar
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -101,124 +119,87 @@
     </div>
 </div>
 
-        <div class="totals">
-            <p>Total productos: $<span id="pagoproductos">0.00</span></p>
-            <p>Total a pagar: $<span id="pagototal">0.00</span></p>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="discount" class="form-label">Descuento</label>
-            <input type="number" wire:model="discount" id="discount" class="form-control" min="0">
-        </div>
-
-
-        <button type="submit" class="btn btn-primary">Guardar Venta</button>
-        <a href="{{ route('sales.index') }}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
 <script>
-    function searchProducts() {
-    var input = document.getElementById("in-busc");
-    var filter = input.value.toUpperCase();
-    var table = document.getElementById("product-list");
-    var rows = table.getElementsByTagName("tr");
-    
-    for (var i = 0; i < rows.length; i++) {
-        var name = rows[i].getElementsByClassName("product-name")[0];
-        if (name) {
-            var txtValue = name.textContent || name.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
-            }
-        }       
+    const selectedProducts = [];
+
+    function addProduct(id, name, price, stock) {
+    const existingProduct = selectedProducts.find(p => p.id === id);
+
+    if (existingProduct) {
+        alert("El producto ya está agregado.");
+        return;
     }
+
+    const quantity = prompt("Ingrese la cantidad:", 1);
+
+    if (!quantity || isNaN(quantity) || quantity <= 0 || quantity > stock) {
+        alert(`Ingrese una cantidad válida entre 1 y ${stock}.`);
+        return;
+    }
+
+    const subtotal = (price * quantity).toFixed(2);
+
+    selectedProducts.push({ id, name, price, quantity, subtotal });
+
+    document.getElementById("selected-products").innerHTML += `
+        <tr data-id="${id}">
+            <td>${name}</td>
+            <td>${quantity}</td>
+            <td>${price}</td>
+            <td>${subtotal}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeProduct(${id})">Eliminar</button>
+            </td>
+            <input type="hidden" name="items[${id}][product_id]" value="${id}">
+            <input type="hidden" name="items[${id}][quantity]" value="${quantity}">
+        </tr>
+    `;
+
+    updateTotals();
 }
-function addProductToSale(productId) {
-    // Obtén todos los productos disponibles en el modal
-    const products = document.querySelectorAll("#product-list tr");
-    
-    // Encuentra el producto correspondiente
-    let selectedProduct = null;
-    products.forEach(product => {
-        const id = product.querySelector(".product-id").value;
-        if (id == productId) {
-            selectedProduct = product;
-        }
+
+function removeProduct(id) {
+    const index = selectedProducts.findIndex(p => p.id === id);
+    if (index !== -1) {
+        selectedProducts.splice(index, 1);
+    }
+
+    const row = document.querySelector(`tr[data-id="${id}"]`);
+    if (row) {
+        row.remove();
+    }
+
+    updateTotals();
+}
+
+function updateTotals() {
+    let total = 0;
+    selectedProducts.forEach(p => {
+        total += parseFloat(p.subtotal);
     });
 
-    if (selectedProduct) {
-        // Obtén los valores del producto seleccionado
-        const idprod = selectedProduct.querySelector(".product-id").value;
-        const cant = selectedProduct.querySelector(".product-quantity").value;
-        const nombre = selectedProduct.querySelector(".product-name").innerHTML;
-        const precio = selectedProduct.querySelector(".product-price").innerHTML;
+    document.getElementById("total-products").textContent = total.toFixed(2);
 
-        // Añade el producto a la tabla de productos seleccionados
-        document.getElementById("list-productos").innerHTML += `
-            <tr class="fila">
-                <td>
-                    <input type="hidden" name="p[]" value="${idprod}">
-                    <input type="hidden" name="c[]" value="${cant}">
-                    <input type="hidden" name="pre[]" value="${precio}">
-                    ${idprod}
-                </td>
-                <td>${nombre}</td>
-                <td>${cant}</td>
-                <td>${precio}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm rounded-0" type="button" title="Eliminar producto" onclick="deleteRow(this)">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </td>
-            </tr>`;
+    const discount = parseFloat(document.getElementById("discount").value || 0);
+    const totalSale = total - discount;
 
-        // Calcula el total del producto
-        const a1 = parseFloat(cant); // Cantidad
-        const a2 = parseFloat(precio); // Precio
-        const totalProduct = a1 * a2; // Total por producto
-        
-        // Actualiza el total
-        const valorprod = parseFloat(document.getElementById("pagoproductos").innerHTML) || 0;
-        const valortot = parseFloat(document.getElementById("pagototal").innerHTML) || 0;
-        
-        const newValue = valorprod + totalProduct;
-        const newTotal = valortot + totalProduct;
+    document.getElementById("total-sale").textContent = totalSale.toFixed(2);
 
-        document.getElementById("pagoproductos").innerHTML = newValue.toFixed(2);
-        document.getElementById("pagototal").innerHTML = newTotal.toFixed(2);
-
-        // Muestra el botón de confirmación si no estaba visible
-        const boton = document.getElementById("btn-conf-venta");
-        boton.style.display = "block";
-    }
-}
-function deleteRow(button) {
-    const row = button.closest('tr'); // Encuentra la fila
-    row.remove();
-
-    // Recalcula el total después de eliminar
-    updateTotal();
+    // Actualizar los campos ocultos para enviar los totales
+    document.getElementById("total").value = total.toFixed(2);
+    document.getElementById("total_after_discount").value = totalSale.toFixed(2);
 }
 
-// Función para actualizar los totales después de eliminar un producto
-function updateTotal() {
-    let totalProduct = 0;
-    let totalSale = 0;
+document.getElementById("discount").addEventListener("input", updateTotals);
 
-    const rows = document.querySelectorAll("#list-productos tr");
+function searchProducts() {
+    const input = document.getElementById("product-search").value.toUpperCase();
+    const rows = document.querySelectorAll("#product-list tr");
+
     rows.forEach(row => {
-        const cantidad = row.querySelector("input[name='c[]']").value;
-        const precio = row.querySelector("input[name='pre[]']").value;
-
-        totalProduct += (parseFloat(cantidad) * parseFloat(precio));
+        const productName = row.querySelector("td:first-child").textContent.toUpperCase();
+        row.style.display = productName.includes(input) ? "" : "none";
     });
-
-    // Actualiza los totales
-    document.getElementById("pagoproductos").innerHTML = totalProduct.toFixed(2);
-    document.getElementById("pagototal").innerHTML = totalProduct.toFixed(2);
 }
-
 </script>
 @endsection
-
