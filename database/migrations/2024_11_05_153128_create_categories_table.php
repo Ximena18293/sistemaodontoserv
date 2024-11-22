@@ -11,19 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('brands', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Ejemplo: 'Kerr' o 'Ormco'
-            $table->string('description')->nullable();
+            $table->foreignId('brand_id')->constrained()->onDelete('cascade'); // Relación con `brands`
+            $table->string('name'); // Nombre de la categoría
             $table->boolean('status')->default(true); // Estado de habilitación
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('categories');
     }
 };

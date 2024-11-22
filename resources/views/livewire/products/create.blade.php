@@ -3,74 +3,69 @@
 @section('title', 'Crear Producto')
 
 @section('content')
-
-<div class="container mx-auto px-4">
-    <h1 class="text-2xl font-semibold mb-4">Crear Producto</h1>
+<div class="container">
+    <h1 class="mb-4">Crear Producto</h1>
 
     <form action="{{ route('products.store') }}" method="POST">
         @csrf
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="mb-4">
-                <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
-                @error('name')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="category" class="form-label">Categoría</label>
-                <input type="text" class="form-control" id="category" name="category" value="{{ old('category') }}">
-                @error('category')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-4">
-                <label for="brand" class="form-label">Marca</label>
-                <input type="text" class="form-control" id="brand" name="brand" value="{{ old('brand') }}">
-                @error('brand')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="description" class="form-label">Descripción</label>
-                <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
-                @error('description')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="price" class="form-label">Precio</label>
-                <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ old('price') }}" required>
-                @error('price')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="stock" class="form-label">Stock</label>
-                <input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock') }}" required>
-                @error('stock')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="status" class="form-label">Estado</label>
-                <select class="form-select" id="status" name="status" required>
-                    <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Activo</option>
-                    <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Inactivo</option>
-                </select>
-                @error('status')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" name="name" id="name" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Crear Producto</button>
+        <div class="form-group">
+            <label for="category">Categoría</label>
+            <select id="category" name="category_id" class="form-control" required>
+                <option value="">Seleccionar Categoría</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Marca</label>
+            <input type="text" id="brand" class="form-control" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea name="description" id="description" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Precio</label>
+            <input type="number" name="price" id="price" class="form-control" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="stock">Stock</label>
+            <input type="number" name="stock" id="stock" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Estado</label>
+            <select name="status" id="status" class="form-control" required>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Guardar Producto</button>
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    const categories = @json($categories);
+    const categorySelect = document.getElementById('category');
+    const brandInput = document.getElementById('brand');
+
+    categorySelect.addEventListener('change', function() {
+        const selectedCategory = categories.find(c => c.id == this.value);
+        brandInput.value = selectedCategory ? selectedCategory.brand.name : '';
+    });
+</script>
+@endpush

@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Route;
+@endphp
+
 <nav class="-mx-3 flex flex-1 justify-end">
     @auth
         <a

@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+@endphp
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -40,6 +44,20 @@
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
                     <li class="mb-4">
+                        <a href="{{route('brands.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
+                            <i class="fas fa-box w-5 h-5 mr-3"></i>
+                            <span class="text-sm font-medium">Marca</span>
+                        </a>
+                    </li>
+                    <hr class="border-t-2 border-orange-800 mx-3">
+                    <li class="mb-4">
+                        <a href="{{route('categories.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
+                            <i class="fas fa-box w-5 h-5 mr-3"></i>
+                            <span class="text-sm font-medium">Categoria</span>
+                        </a>
+                    </li>
+                    <hr class="border-t-2 border-orange-800 mx-3">
+                    <li class="mb-4">
                         <a href="{{route('users.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
                             <i class="fas fa-users w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Usuarios</span>
@@ -47,18 +65,19 @@
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
                     <li class="mb-4">
-                        <a href="#" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
+                        <a href="{{route('clients.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
                             <i class="fas fa-users w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Clientes</span>
                         </a>
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
                     <li class="mb-4">
-                        <a href="{{route('employees.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
+                        <a href="{{route('sales.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
                             <i class="fas fa-users w-5 h-5 mr-3"></i>
-                            <span class="text-sm font-medium">Empleados</span>
+                            <span class="text-sm font-medium">Ventas</span>
                         </a>
                     </li>
+                    
                 </ul>
             </nav>
         </aside>
