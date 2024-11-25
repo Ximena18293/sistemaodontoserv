@@ -153,27 +153,25 @@
                         $totalSum = 0;
                     @endphp
                     @foreach ($items as $item)
-                    @php
-                        $rowTotal = (($item->price * $item->quantity) - $item->discount) + ($sale->total - $sale->discount);
-                        $totalSum += $rowTotal;
-                    @endphp
+                        @php
+                            // Cálculo corregido del importe por fila
+                            $rowTotal = ($item->price * $item->quantity) - $sale->discount;
+                            $totalSum += $rowTotal;
+                        @endphp
                         <tr>
                             <td>{{ $item->product->name }}</td>
                             <td>{{ number_format($item->price, 2) }}Bs.</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format(($item->price * $item->quantity) - $item->discount, 2) }}Bs.</td>
+                            <td>{{ number_format($item->price * $item->quantity, 2) }}Bs.</td>
                             <td>{{ number_format($sale->discount, 2) }}Bs.</td>
-                            <td>{{ number_format($sale->total - $sale->discount, 2) }}Bs.</td>
+                            <td>{{ number_format($rowTotal, 2) }}Bs.</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <th style="font-size: 13px"> Total general</th>
+                        <td colspan="4"></td>
+                        <th style="font-size: 13px">Total general</th>
                         <th style="font-size: 13px">{{ number_format($totalSum, 2) }} Bs.</th>
                     </tr>
                 </tfoot>

@@ -115,9 +115,9 @@ Route::prefix('sales/{sale}/items')->group(function () {
 Route::get('/reports', function () {
     return view('reports.index');
 })->name('reports.index');
-Route::get('/report/sales', [SaleController::class, 'salesReport'])->name('reports.sales');
-Route::get('/report/inventory', [Inventory::class, 'inventoryReport'])->name('reports.inventory');
+Route::post('/report/sales', [SaleController::class, 'salesReport'])->name('reports.sales');
+Route::post('/report/inventory', [Inventory::class, 'inventoryReport'])->name('reports.inventory');
 
-Route::get('/report/top-selling-products', [Inventory::class,  'getTopSellingProducts'])->name('reports.top-selling-products');;
+Route::post('/report/top-selling-products', [Inventory::class,  'getTopSellingProducts'])->name('reports.top-selling-products');;
 
 require __DIR__.'/auth.php';

@@ -117,11 +117,18 @@ class SaleController extends Controller
     }
 
     // Generar reporte de ventas
-    public function salesReport()
+    public function salesReport(Request $request)
     {
-        $sales = Sale::with('client', 'saleItems.product')->get();
+        $request->validate([
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+        ]);
+        $sales = Sale::whereBetween('created_at', [
+            $request->fecha_inicio,
+            $request->fecha_fin,
+        ])->get();
 
-        $pdf = PDF::loadView('reportes.sales', compact('sales'));
+        $pdf = PDF::loadView('reports.sales', compact('sales'));
 
         return $pdf->stream('sales_report.pdf');
     }
