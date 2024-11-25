@@ -38,7 +38,7 @@
                                 </span>
                             </td>
                             <td class="py-2 px-4">
-                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a> 
                                 
                                 <form action="{{ route('categories.toggleStatus', $category->id) }}" method="POST" style="display:inline;">
                                     @csrf
@@ -51,7 +51,7 @@
                                 <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                 </form>
                             </td>
                         </tr>

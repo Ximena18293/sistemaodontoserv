@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Marca') <!-- Cambia esto para reflejar que es una edición -->
+@section('header', 'Editar Marca') <!-- Cambia esto para reflejar que es una edición -->
 
 @section('content')
 <div class="container mx-auto px-4">

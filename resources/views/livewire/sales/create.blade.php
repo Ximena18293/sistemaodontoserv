@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Nueva Venta')
+@section('header', 'Crear Nueva Venta')
 
 @section('content')
 <div class="container">
-    <h1>Crear Nueva Venta</h1>
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

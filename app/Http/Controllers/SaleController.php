@@ -6,7 +6,6 @@ use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Product;
 use App\Models\Client;
-use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +26,8 @@ class SaleController extends Controller
         $date = now()->format('ymd'); // Formato: YYMMDD
         $lastInvoice = Sale::whereDate('created_at', today())->latest()->first();
 
-        $counter = $lastInvoice ? intval(substr($lastInvoice->invoice_number, -1)) + 1 : 1;
-        return "REC-{$date}-{$counter}";
+        $counter = $lastInvoice ? intval(substr($lastInvoice->invoice_number, -3)) + 1 : 1;
+        return "REC-{$date}-" . str_pad($counter, 3, '0', STR_PAD_LEFT);
     }
 
     // Crear una venta
@@ -36,18 +35,14 @@ class SaleController extends Controller
     {
         $clients = Client::all();
         $products = Product::all();
-        $items = SaleItem::all();
-        return view('livewire.sales.create', compact('clients', 'products','items'));
-    }
-    public function product()
-    {
-        $products = Product::all();
-        return view('livewire.sales.product', compact('products'));
+        return view('livewire.sales.create', compact('clients', 'products'));
     }
 
+    // Almacenar la venta
     public function store(Request $request)
     {
         $userId = auth()->id();
+
         // Validación de los datos del formulario
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
@@ -63,6 +58,7 @@ class SaleController extends Controller
         // Crear la venta
         $sale = new Sale();
         $sale->client_id = $client->id;
+        $sale->invoice_number = $this->generateInvoiceNumber(); // Generar número de factura
         $sale->total = 0;
         $sale->discount = $validated['discount'] ?? 0;
         $sale->user_id = auth()->id();
@@ -98,7 +94,7 @@ class SaleController extends Controller
         $totalAfterDiscount = $total - ($validated['discount'] ?? 0);
 
         // Actualizar el total de la venta
-        $sale->total = $total;
+        $sale->total = $totalAfterDiscount;
         $sale->save();
 
         // Redirigir con un mensaje de éxito
@@ -119,41 +115,44 @@ class SaleController extends Controller
 
         return $pdf->stream('Factura-' . $sale->invoice_number . '.pdf');
     }
+
+    // Generar reporte de ventas
     public function salesReport()
     {
-        // Obtener las ventas con los detalles de los productos vendidos
         $sales = Sale::with('client', 'saleItems.product')->get();
 
-        // Generar el PDF
         $pdf = PDF::loadView('reportes.sales', compact('sales'));
 
-        // Mostrar el PDF en el navegador (en lugar de descargar)
         return $pdf->stream('sales_report.pdf');
     }
+
+    // Desactivar una venta (eliminación lógica)
     public function destroy($id)
     {
-        // Encuentra la venta por ID
         $sale = Sale::findOrFail($id);
 
-        // Cambia el estado a "Inactivo" (0)
+        // Cambiar estado a "Inactivo"
         $sale->update(['status' => 0]);
 
-        // Redirige con un mensaje de éxito
         return redirect()->route('sales.index')->with('success', 'La venta ha sido desactivada correctamente.');
     }
+
+    // Mostrar formulario de edición
     public function edit($id)
     {
-        $sale = Sale::findOrFail($id); // Encuentra la venta por ID
-        $clients = Client::all(); // Obtén todos los clientes (opcional, si deseas cambiar el cliente)
-        
+        $sale = Sale::findOrFail($id);
+        $clients = Client::all();
+
         return view('livewire.sales.update', compact('sale', 'clients'));
     }
+
+    // Actualizar una venta
     public function update(Request $request, $id)
     {
-        $sale = Sale::findOrFail($id); // Encuentra la venta por ID
+        $sale = Sale::findOrFail($id);
 
-        // Valida los datos recibidos
-        $request->validate([
+        // Validar los datos recibidos
+        $validated = $request->validate([
             'invoice_number' => 'required|string|max:255',
             'client_id' => 'required|exists:clients,id',
             'total' => 'required|numeric|min:0',
@@ -161,18 +160,15 @@ class SaleController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        // Actualiza los datos de la venta
+        // Actualizar los datos de la venta
         $sale->update([
-            'invoice_number' => $request->invoice_number,
-            'client_id' => $request->client_id,
-            'total' => $request->total,
-            'discount' => $request->discount ?? 0,
-            'status' => $request->status,
+            'invoice_number' => $validated['invoice_number'],
+            'client_id' => $validated['client_id'],
+            'total' => $validated['total'],
+            'discount' => $validated['discount'] ?? 0,
+            'status' => $validated['status'],
         ]);
 
-        // Redirige con un mensaje de éxito
         return redirect()->route('sales.index')->with('success', 'La venta ha sido actualizada correctamente.');
     }
-
-
 }

@@ -41,4 +41,9 @@ class Product extends Model
             'brand_id' // Clave foránea en la tabla de categorías
         );
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

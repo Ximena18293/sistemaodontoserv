@@ -1,11 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Cliente')
+@section('header', 'Editar Cliente')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Editar Cliente</h1>
-
     <form action="{{ route('clients.update', $client->id) }}" method="POST">
         @csrf
         @method('PUT')

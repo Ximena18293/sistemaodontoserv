@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Producto')
+@section('header', 'Editar Producto')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Editar Producto</h1>
 
     <form action="{{ route('products.update', $product->id) }}" method="POST">
         @csrf

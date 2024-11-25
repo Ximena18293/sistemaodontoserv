@@ -1,11 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Categoría')
+@section('header', 'Editar Categoría')
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-2xl font-semibold mb-4">Editar Categoría</h1>
-
     <form action="{{ route('categories.update', $category->id) }}" method="POST">
         @csrf
         @method('PUT')

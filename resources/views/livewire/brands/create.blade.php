@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Marca')
+@section('header', 'Crear Marca')
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-2xl font-semibold mb-4">Crear Marca</h1>
 
     <form action="{{ route('brands.store') }}" method="POST">
         @csrf
@@ -25,7 +24,10 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Crear Marca</button>
+        <div class="d-flex mt-3">
+            <button type="submit" class="btn btn-primary me-2">Crear Marca</button>
+            <a href="{{ route('brands.index') }}" class="btn btn-info">Volver</a>
+        </div>
     </form>
 </div>
 @endsection

@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Cliente')
+@section('header', 'Crear Cliente')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Crear Cliente</h1>
 
     <form action="{{ route('clients.store') }}" method="POST">
         @csrf
@@ -52,7 +51,10 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Guardar Cliente</button>
+        <div class="d-flex mt-3">
+            <button type="submit" class="btn btn-primary me-2">Guardar Cliente</button>
+            <a href="{{ route('clients.index') }}" class="btn btn-info">Volver</a>
+        </div>
     </form>
 </div>
 @endsection

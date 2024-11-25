@@ -21,13 +21,13 @@
       
         <aside class="w-64 bg-yellow-400 text-black min-h-screen shadow-lg border-r-8 border-black">
             <div class="p-4 flex justify-center">
-                <img src="{{ asset('logo.jpeg') }}" alt="Odontoserv Logo" class="w-48 h-auto border border-black border-2 p-2">
+                <img src="{{ asset('logoodonto.jpeg') }}" alt="Odontoserv Logo" class="w-48 h-auto border border-black border-2 p-2">
             </div>
 
-            <nav class="mt-10">
+            <nav class="mt-25">
                 <ul>
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <!-- Redirigir al Dashboard -->
                         <a href="{{ route('dashboard') }}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
                             <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
@@ -36,45 +36,52 @@
                     </li>
                     
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <a href="{{route('products.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
-                            <i class="fas fa-box w-5 h-5 mr-3"></i>
+                            <i class="fas fa-box-open w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Productos</span>
                         </a>
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <a href="{{route('brands.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
-                            <i class="fas fa-box w-5 h-5 mr-3"></i>
+                            <i class="fas fa-tag w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Marca</span>
                         </a>
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <a href="{{route('categories.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
-                            <i class="fas fa-box w-5 h-5 mr-3"></i>
+                            <i class="fas fa-th-list w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Categoria</span>
                         </a>
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <a href="{{route('users.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
-                            <i class="fas fa-users w-5 h-5 mr-3"></i>
+                            <i class="fas fa-user-shield w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Usuarios</span>
                         </a>
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <a href="{{route('clients.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
-                            <i class="fas fa-users w-5 h-5 mr-3"></i>
+                            <i class="fas fa-user-friends w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Clientes</span>
                         </a>
                     </li>
                     <hr class="border-t-2 border-orange-800 mx-3">
-                    <li class="mb-4">
+                    <li class="mb-2">
                         <a href="{{route('sales.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
-                            <i class="fas fa-users w-5 h-5 mr-3"></i>
+                            <i class="fas fa-shopping-cart w-5 h-5 mr-3"></i>
                             <span class="text-sm font-medium">Ventas</span>
+                        </a>
+                    </li>
+                    <hr class="border-t-2 border-orange-800 mx-3">
+                    <li class="mb-2">
+                        <a href="{{route('reports.index')}}" class="flex items-center px-6 py-3 hover:bg-black hover:text-white rounded transition duration-300">
+                            <i class="fas fa-chart-pie w-5 h-5 mr-3"></i>
+                            <span class="text-sm font-medium">Reportes</span>
                         </a>
                     </li>
                     

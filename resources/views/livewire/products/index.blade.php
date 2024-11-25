@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Productos')
+@section('header', 'Lista de Productos')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Lista de Productos</h1>
     <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">
         <i class="fas fa-plus"></i> Agregar Producto
     </a>
@@ -25,7 +24,7 @@
                         <th>Precio</th>
                         <th>Stock</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
+                        <th colspan="2">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,21 +32,23 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $product->name }}</td>
-                            <td>{{ $product->brand->name }}</td>
+                            <td>
+                                {{ $product->category && $product->category->brand ? $product->category->brand->name : 'Sin Marca' }}
+                            </td>
                             <td>{{ $product->description }}</td>
-                            <td>${{ number_format($product->price, 2) }}</td>
+                            <td colspan="2" style="font-size: 13px">{{ number_format($product->price, 2) }} Bs.</td>
                             <td>{{ $product->stock }}</td>
                             <td>
                                 <span class="badge {{ $product->status ? 'bg-success' : 'bg-danger' }}">
                                     {{ $product->status ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </td>
-                            <td>
-                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <td class="py-3 px-4 flex space-x-2">
+                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')"><i class="fas fa-trash"></i></button>
                                 </form>
                                 <form action="{{ route('products.toggleStatus', $product->id) }}" method="POST" style="display:inline;">
                                     @csrf

@@ -52,21 +52,21 @@ new #[Layout('layouts.guest')] class extends Component
     <form wire:submit.prevent="register">
         <!-- Usuario -->
         <div>
-            <x-input-label for="name" :value="__('Usuario')" />
+            <x-input-label for="name" :value="__('Nombre')" />
             <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Primer Nombre -->
         <div class="mt-4">
-            <x-input-label for="first_name" :value="__('Primer Nombre')" />
+            <x-input-label for="first_name" :value="__('Primer Apellido')" />
             <x-text-input wire:model="first_name" id="first_name" class="block mt-1 w-full" type="text" name="first_name" required autocomplete="first_name" />
             <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
         </div>
 
         <!-- Apellido -->
         <div class="mt-4">
-            <x-input-label for="last_name" :value="__('Apellido')" />
+            <x-input-label for="last_name" :value="__('Segundo Apellido')" />
             <x-text-input wire:model="last_name" id="last_name" class="block mt-1 w-full" type="text" name="last_name" autocomplete="last_name" />
             <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
         </div>

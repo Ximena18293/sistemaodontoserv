@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Ventas')
+@section('header', 'Lista de Ventas')
 
 @section('content')
 <div class="container">
-    <h1>Lista de Ventas</h1>
 
     <a href="{{ route('sales.create') }}" class="btn btn-primary mb-3">
         <i class="fas fa-plus"></i> Agregar Venta

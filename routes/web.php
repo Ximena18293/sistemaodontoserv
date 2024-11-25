@@ -10,7 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleItemController;
-
+use App\Http\Controllers\Inventory;
 Route::view('/', 'welcome');
 
 // Dashboard
@@ -112,6 +112,12 @@ Route::prefix('sales/{sale}/items')->group(function () {
     Route::delete('/{item}', [SaleItemController::class, 'destroy'])->name('sales.items.destroy'); // Eliminar un producto
 });
 
+Route::get('/reports', function () {
+    return view('reports.index');
+})->name('reports.index');
 Route::get('/report/sales', [SaleController::class, 'salesReport'])->name('reports.sales');
+Route::get('/report/inventory', [Inventory::class, 'inventoryReport'])->name('reports.inventory');
+
+Route::get('/report/top-selling-products', [Inventory::class,  'getTopSellingProducts'])->name('reports.top-selling-products');;
 
 require __DIR__.'/auth.php';

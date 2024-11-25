@@ -22,7 +22,7 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
+                        <th colspan="2">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,12 +39,12 @@
                                     {{ $client->status ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </td>
-                            <td>
-                                <a href="{{ route('clients.edit', $client) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <td class="py-3 px-4 flex space-x-2">
+                                <a href="{{ route('clients.edit', $client) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('clients.destroy', $client) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                 </form>
                                 <form action="{{ route('clients.toggleStatus', $client) }}" method="POST" style="display:inline;">
                                     @csrf
