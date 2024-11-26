@@ -143,7 +143,7 @@ class UserController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'role' => $request->role,
-            'status' => $request->status,
+            'status' => 2,
             'password' => Hash::make($request->password), // Usar Hash::make en lugar de bcrypt
             'user_id' => Auth::id(), // Cambiado de Auth::user()->id a Auth::id()
         ]);
@@ -159,5 +159,29 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado correctamente.');
+    }
+    public function updateUser(Request $request)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+    
+        // Buscar al usuario por email
+        $user = User::where('email', $validatedData['email'])->first();
+    
+        if (!$user) {
+            return response()->json([
+                'message' => 'Usuario no encontrado.',
+            ], 404);
+        }
+    
+        // Actualizar estado y contraseña
+        $user->status = 1; // Actualizar el estado a 1
+        $user->password = Hash::make($validatedData['password']);
+        $user->save();
+    
+        return redirect()->route('dashboard');
     }
 }

@@ -5,6 +5,8 @@ use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 new #[Layout('layouts.guest')] class extends Component
 {
@@ -13,16 +15,29 @@ new #[Layout('layouts.guest')] class extends Component
     /**
      * Handle an incoming authentication request.
      */
-    public function login(): void
-    {
-        $this->validate();
+     public function login()
+{
+    // Validar los datos del formulario
+    $this->validate();
 
-        $this->form->authenticate();
+    // Autenticar al usuario
+    $this->form->authenticate();
 
-        Session::regenerate();
+    // Regenerar la sesión para proteger contra ataques de fijación de sesión
+    Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    // Obtener el usuario autenticado
+    $user = Auth::user();
+
+    // Comprobar si el estado del usuario es 2
+    if ($user->status == 2) {
+        Auth::logout();
+        return redirect()->route('first-login');
     }
+
+    // Si el estado no es 2, redirigir a la página predeterminada (o la página que se pretendía acceder)
+    $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+}
 }; ?>
 
 <div>

@@ -11,9 +11,10 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleItemController;
 use App\Http\Controllers\Inventory;
+use Illuminate\Support\Facades\View;
 Route::view('/', 'welcome');
 
-// Dashboard
+// Dashboard 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -118,6 +119,10 @@ Route::get('/reports', function () {
 Route::post('/report/sales', [SaleController::class, 'salesReport'])->name('reports.sales');
 Route::post('/report/inventory', [Inventory::class, 'inventoryReport'])->name('reports.inventory');
 
-Route::post('/report/top-selling-products', [Inventory::class,  'getTopSellingProducts'])->name('reports.top-selling-products');;
+Route::post('/report/top-selling-products', [Inventory::class,  'getTopSellingProducts'])->name('reports.top-selling-products');
+Route::get('/change-password', function () {
+    return View::make('livewire.first-login');
+})->name('first-login');
+Route::post('/change-password', [UserController::class,  'updateUser'])->name('updateUser');;
 
 require __DIR__.'/auth.php';
